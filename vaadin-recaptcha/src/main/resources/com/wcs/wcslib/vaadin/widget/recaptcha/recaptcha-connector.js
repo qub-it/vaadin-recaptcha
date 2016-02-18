@@ -19,7 +19,7 @@ function() {
 	
 	var element = this.getElement();
 	var connector = this;
-	
+	var recaptchaId = null;
 	this.onStateChange = function() {
 		this.stateChangedDuringLoad = true;
 	}
@@ -39,17 +39,17 @@ function() {
 	        
 	        //Add callback to grecaptcha options to force server update on user input
 	        state.options['callback'] = function(){
-	        	connector.responseChanged(grecaptcha.getResponse());
+	        	connector.responseChanged(grecaptcha.getResponse(recaptchaId));
         	};
         	
         	//Add expired-callback to reload component automatically
         	state.options['expired-callback'] = this.reload;
         	
-	        grecaptcha.render(elementId, state.options);
+        	recaptchaId = grecaptcha.render(elementId, state.options);
 	    };
 	    
 	    this.reload = function() {
-	    	grecaptcha.reset();
+	    	grecaptcha.reset(recaptchaId);
 	    };
 
     }.bind(this);
